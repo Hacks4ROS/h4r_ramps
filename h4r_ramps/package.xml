@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<package>
+  <name>h4r_ramps</name>
+  <version>0.0.0</version>
+  <description>Package for controlling stepper motors on a ramps shield on the Arduino Mega2560 </description>
+
+  <maintainer email="cyborgx1@gmail.com">Christian Holl</maintainer>
+  <author email="cyborgx1@gmail.com">Christian Holl</author>
+  
+  <license>GPLv3</license> <!-- ROS Node -->
+  
+  <license>GPLv2</license><!-- AccelStepper -->
+  <license>MIT</license><!-- Fast CRC -->
+  <license>CC Attribution 3.0</license><!-- TimerOne -->
+  
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>serial</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>tf</build_depend>
+  <run_depend>geometry_msgs</run_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>sensor_msgs</run_depend>
+  <run_depend>serial</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>tf</run_depend>
+
+  <build_depend>joint_limits_interface</build_depend>
+  <run_depend>joint_limits_interface</run_depend>
+  
+  <run_depend>control_toolbox</run_depend>
+  <build_depend>control_toolbox</build_depend>
+  
+  <run_depend>roslib</run_depend>
+  <build_depend>roslib</build_depend>
+     
+  <build_depend>diagnostic_msgs</build_depend>
+  <run_depend>diagnostic_msgs</run_depend>
+
+  <build_depend>controller_manager</build_depend>
+  <run_depend>controller_manager</run_depend>
+  
+  <build_depend>hardware_interface</build_depend>
+  <run_depend>hardware_interface</run_depend>
+  
+
+  <export>
+
+  </export>
+</package>
