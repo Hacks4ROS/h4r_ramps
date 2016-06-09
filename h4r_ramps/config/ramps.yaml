@@ -1,0 +1,39 @@
+rampsX:
+  type: position_controllers/JointPositionController
+  joint: joint_x
+  
+rampsY:
+  type: position_controllers/JointPositionController
+  joint: joint_y
+  
+rampsZ:
+  type: position_controllers/JointPositionController
+  joint: joint_z
+
+rampsE0:
+  type: position_controllers/JointPositionController
+  joint: joint_e0
+
+rampsE1:
+  type: position_controllers/JointPositionController
+  joint: joint_e1
+
+
+JointJointState:
+  type: joint_state_controller/JointStateController
+  publish_rate: 10
+  
+JointPosGroup:
+  type: "position_controllers/JointGroupPositionController"
+  joints:
+    - joint_x
+    - joint_y
+    - joint_z
+    
+JointTrajectory:
+  type: "position_controllers/JointTrajectoryController"
+  joints:
+    - joint_x
+    - joint_y
+    - joint_z
+
