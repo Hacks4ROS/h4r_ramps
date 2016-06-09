@@ -1,0 +1,6 @@
+eclipse.preferences.version=1
+environment/project/0.910961921/PATH/delimiter=\:
+environment/project/0.910961921/PATH/operation=replace
+environment/project/0.910961921/PATH/value=/data/Daten/Entwicklung/ros_workspaces/h4r_ros_reprap/devel/bin\:/data/Daten/Entwicklung/ros_workspaces/h4r_ev3_ws/devel/bin\:/data/Daten/Entwicklung/ros_workspaces/roboyagi_ws/devel/bin\:/opt/ros/indigo/bin\:/data/Daten/Programme/XMOS/xTIMEcomposer/Community_14.1.0/bin\:/data/Daten/Programme/XMOS/xTIMEcomposer/Community_14.1.0/xtimecomposer_bin\:/data/Daten/Programme/XMOS/xTIMEcomposer/Community_14.1.0/arm_toolchain/bin\:/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/usr/games\:/usr/local/games\:/data/Daten/Scripts/ROS
+environment/project/0.910961921/append=true
+environment/project/0.910961921/appendContributed=true
