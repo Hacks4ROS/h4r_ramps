@@ -5,6 +5,104 @@
 #include <TimerOne.h>
 #include "pins.h"
 #include "SerialMotorControl.h"
+#include "pcInt.h"
+
+
+
+class Encoder {
+
+
+	int32_t position_;
+
+	typedef enum
+	{
+		A,
+		B,
+		I,
+	}PinID_t;
+
+
+	typedef struct
+	{
+		volatile uint8_t * port;
+		uint8_t mask;
+	}pcPortMask_t;
+
+
+	pcPortMask_t ports[3];
+	uint8_t last_[3];
+
+
+	void a()
+	{
+		uint8_t curr = (*ports[A].port)&ports[A].mask;
+
+		last_[A]=curr;
+	}
+
+	void b()
+	{
+		uint8_t curr = (*ports[B].port)&ports[B].mask;
+
+		last_[B]=curr;
+	}
+
+	void c()
+	{
+		uint8_t curr = (*ports[I].port)&ports[I].mask;
+
+
+		last_[I]=curr;
+	}
+
+
+
+public:
+	Encoder(uint8_t pinA, uint8_t pinB, uint8_t pinI=-1)
+	:position_(0)
+	{
+
+		for (int i = 0; i < 3; ++i)
+		{
+			uint8_t pin;
+
+			switch(i)
+			{
+			case A:
+				pin=pinA;
+				break;
+
+			case B:
+				pin=pinB;
+				break;
+
+			case I:
+				pin=pinI;
+				break;
+			}
+
+			ports[i].mask=digitalPinToBitMask(pinI);
+			ports[i].port=digitalPinToPort(pinI);
+
+			last_[i]=(*ports[i].port)&ports[i].mask;
+		}
+	}
+
+	int32_t getPosition()
+	{
+		return position_;
+	}
+
+	void reset(int32_t position=0)
+	{
+		position_=position;
+	}
+
+
+
+};
+
+
 
 
 bool pos_nVel=true;
@@ -72,6 +170,7 @@ void setup()
 
     Timer1.initialize(100);
     Timer1.attachInterrupt(stepper);
+
 }
 
 void loop()
