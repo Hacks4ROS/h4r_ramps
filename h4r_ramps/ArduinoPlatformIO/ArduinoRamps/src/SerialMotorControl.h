@@ -172,7 +172,7 @@ public:
 
 			if(state_!=RECV_DATA)
 			{
-				input_.buf[data_state_]=readByte();
+				input_.buf[data_state_]=readByte();//TODO compiler warning above bounds??? Something wrong here? Check array bounds later
 
 			}
 			else //DATA BULK READING
