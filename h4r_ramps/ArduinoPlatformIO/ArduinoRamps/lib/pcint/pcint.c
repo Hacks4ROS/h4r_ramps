@@ -1,7 +1,5 @@
-#ifndef PCINT_H_
-#define PCINT_H_
+#include "pcInt.h"
 
-#include "pins_arduino.h"
 /*
  * an extension to the interrupt support for arduino.
  * add pin change interrupts to the external interrupts, giving a way
@@ -158,10 +156,3 @@ SIGNAL(PCINT2_vect) {
   PCint(2);
 }
 #endif
-
-
-
-
-
-
-#endif /* PCINT_H_ */
