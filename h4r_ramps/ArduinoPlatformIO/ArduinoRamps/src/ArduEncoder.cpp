@@ -93,8 +93,9 @@ ArduEncoder::ArduEncoder(int32_t ticks_per_round, uint8_t pinA, uint8_t pinB, bo
 			attachInterrupt(pin,i_fct,CHANGE);
 		}
 
-		num++;
 	}
+	//Increase class number
+		num++;
 }
 
 ArduEncoder::~ArduEncoder()
