@@ -38,16 +38,7 @@ case NUM:\
 namespace ardu_encoder
 {
 
-//forward declarations
 class ArduEncoder;
-//template <ArduEncoder* enc>
-//class ArduEncoderWrapper;
-
-
-
-
-
-
 class ArduEncoder
 {
 	static int num;
@@ -56,15 +47,19 @@ class ArduEncoder
 	INTWRAPS(b);
 	INTWRAPS(i);
 
+	int32_t reset_pos_;
 	int32_t position_;
+	int32_t ticks_per_round_;
+
+	bool mode_x4_;
+	bool error_;
 
 	typedef enum
 	{
-		A,
-		B,
-		I,
+		id_A,
+		id_B,
+		id_I,
 	}PinID_t;
-
 
 	typedef struct
 	{
@@ -72,40 +67,68 @@ class ArduEncoder
 		uint8_t mask;
 	}pcPortMask_t;
 
+	void tick(PinID_t channel)
+	{
+		bool current;
+		bool other;
+
+		uint8_t A=( (*ports[id_A].port) & ports[id_A].mask );
+		uint8_t B=( (*ports[id_B].port) & ports[id_B].mask );
+
+		switch(channel)
+		{
+		case id_A:
+			if(last_chan_state_[id_A]==A)
+				return;
+
+			current=!A;
+			other=B;
+			last_chan_state_[id_A]=A;
+			break;
+		case id_B:
+			if(last_chan_state_[id_B]==B)
+				return;
+
+			current=B;
+			other=A;
+			last_chan_state_[id_B]=B;
+			break;
+		default:
+			return;
+		}
+
+		switch(current^other)
+		{
+		case 0:
+			position_++;
+			break;
+		case 1:
+			position_--;
+			break;
+		}
+	}
 
 	pcPortMask_t ports[3];
-	uint8_t last_[3];
-
+	uint8_t last_chan_state_[3];
 
 	void a()
 	{
-		uint8_t curr = (*ports[A].port)&ports[A].mask;
-
-		last_[A]=curr;
+		tick(id_A);
 	}
 
 	void b()
 	{
-		uint8_t curr = (*ports[B].port)&ports[B].mask;
-
-		last_[B]=curr;
+		tick(id_B);
 	}
 
 	void i()
 	{
-		uint8_t curr = (*ports[I].port)&ports[I].mask;
 
-
-		last_[I]=curr;
 	}
 
 
-
-
-
-
 public:
-	ArduEncoder(uint8_t pinA, uint8_t pinB, uint8_t pinI=-1);
+	ArduEncoder(int32_t ticks_per_round, uint8_t pinA, uint8_t pinB, bool x4, uint8_t pinI=-1);
 
 	virtual ~ArduEncoder();
 
@@ -117,20 +140,10 @@ public:
 	void reset(int32_t position=0)
 	{
 		position_=position;
+		reset_pos_=position;
 	}
-
-
 };
 
-//template <ArduEncoder* enc>
-//class ArduEncoderWrapper
-//{
-//public:
-//	static void intFcta ()
-//	{
-//		enc->a();
-//	}
-//};
 
 
 } /* namespace ardu_encoder */

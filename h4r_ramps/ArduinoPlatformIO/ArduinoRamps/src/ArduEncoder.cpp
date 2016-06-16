@@ -16,8 +16,11 @@ namespace ardu_encoder
 {
 
 
-ArduEncoder::ArduEncoder(uint8_t pinA, uint8_t pinB, uint8_t pinI)
+ArduEncoder::ArduEncoder(int32_t ticks_per_round, uint8_t pinA, uint8_t pinB, bool x4, uint8_t pinI)
 :position_(0)
+,ticks_per_round_(ticks_per_round)
+,mode_x4_(x4)
+,error_(false)
 {
 
 	interrupt_array[num]=this;
@@ -48,20 +51,20 @@ ArduEncoder::ArduEncoder(uint8_t pinA, uint8_t pinB, uint8_t pinI)
 		void (*i_fct)();
 		switch(i)
 		{
-		case A:
+		case id_A:
 			pin=pinA;
 			interrupt = digitalPinToInterrupt(pinA);
 			i_fct=a_fct_ptr;
 			break;
 
-		case B:
+		case id_B:
 			pin=pinB;
 			interrupt = digitalPinToInterrupt(pinB);
 			i_fct=b_fct_ptr;
 			break;
 
 
-		case I:
+		case id_I:
 
 			if(pinI<0) /*PinI is optional*/
 				break;
@@ -79,7 +82,7 @@ ArduEncoder::ArduEncoder(uint8_t pinA, uint8_t pinB, uint8_t pinI)
 		ports[i].mask=digitalPinToBitMask(pin);
 		ports[i].port=(volatile uint8_t*)digitalPinToPort(pin);
 
-		last_[i]=(*ports[i].port)&ports[i].mask;
+		last_chan_state_[i]=(*ports[i].port)&ports[i].mask;
 
 		if(interrupt!=NOT_AN_INTERRUPT)
 		{
