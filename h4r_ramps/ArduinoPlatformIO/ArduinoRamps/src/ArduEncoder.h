@@ -85,15 +85,19 @@ class ArduEncoder
 
 			current=!A;
 			other=B;
+
+			if(B && !mode_x4_)
+				return;
 			last_chan_state_[id_A]=A;
 			break;
 		case id_B:
 //			if(last_chan_state_[id_B]==B)
 //				return;
-
 			current=B;
 			other=A;
 			last_chan_state_[id_B]=B;
+			if(!mode_x4_)
+				return;
 			break;
 		default:
 			return;
