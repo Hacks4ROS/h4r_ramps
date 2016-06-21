@@ -6,7 +6,7 @@
 #include <TimerOne.h>
 #include "pins.h"
 #include "SerialMotorControl.h"
-#include "pcInt.h"
+#include <pcInt.h>
 
 #include "ArduEncoder.h"
 
@@ -45,48 +45,73 @@ void stepper()
 
 
 
+int blub=0;
+void testa()
+{
+	blub++;
+}
+
 void setup()
 {
 
 
 	Serial.begin(9600);
-//	Serial.setInterruptPriority(10);
 
-	pinMode(X_ENABLE_PIN,OUTPUT);
-	pinMode(Y_ENABLE_PIN,OUTPUT);
-	pinMode(Z_ENABLE_PIN,OUTPUT);
-	pinMode(E_ENABLE_PIN,OUTPUT);
 
-	digitalWrite(X_ENABLE_PIN,LOW);
-	digitalWrite(Y_ENABLE_PIN,LOW);
-	digitalWrite(Z_ENABLE_PIN,LOW);
-	digitalWrite(E_ENABLE_PIN,HIGH);
+//	pinMode(X_ENABLE_PIN,OUTPUT);
+//	pinMode(Y_ENABLE_PIN,OUTPUT);
+//	pinMode(Z_ENABLE_PIN,OUTPUT);
+//	pinMode(E_ENABLE_PIN,OUTPUT);
+//
+//	digitalWrite(X_ENABLE_PIN,LOW);
+//	digitalWrite(Y_ENABLE_PIN,LOW);
+//	digitalWrite(Z_ENABLE_PIN,LOW);
+//	digitalWrite(E_ENABLE_PIN,HIGH);
+//
+//	stepperX.setAcceleration(100);
+//	stepperY.setAcceleration(100);
+//	stepperZ.setAcceleration(100);
+//	stepperE0.setAcceleration(100);
+//	stepperE1.setAcceleration(100);
+//
+//	stepperX.setMaxSpeed(1000);
+//	stepperY.setMaxSpeed(1000);
+//	stepperZ.setMaxSpeed(1000);
+//	stepperE0.setMaxSpeed(1000);
+//	stepperE1.setMaxSpeed(1000);
+//
+//	multistepper.addStepper(stepperX);
+//	multistepper.addStepper(stepperY);
+//	multistepper.addStepper(stepperZ);
+//	multistepper.addStepper(stepperE0);
+//	multistepper.addStepper(stepperE1);
+//
+//    Timer1.initialize(100);
+//    Timer1.attachInterrupt(stepper);
+//
 
-	stepperX.setAcceleration(100);
-	stepperY.setAcceleration(100);
-	stepperZ.setAcceleration(100);
-	stepperE0.setAcceleration(100);
-	stepperE1.setAcceleration(100);
 
-	stepperX.setMaxSpeed(1000);
-	stepperY.setMaxSpeed(1000);
-	stepperZ.setMaxSpeed(1000);
-	stepperE0.setMaxSpeed(1000);
-	stepperE1.setMaxSpeed(1000);
-
-	multistepper.addStepper(stepperX);
-	multistepper.addStepper(stepperY);
-	multistepper.addStepper(stepperZ);
-	multistepper.addStepper(stepperE0);
-	multistepper.addStepper(stepperE1);
-
-    Timer1.initialize(100);
-    Timer1.attachInterrupt(stepper);
-
+//    pinMode(1,INPUT);
+//    attachInterrupt(digitalPinToInterrupt(21),testa,CHANGE);
 }
 
 void loop()
 {
+	ardu_encoder::ArduEncoder EncoderX(512,20 /*A*/,21 /*B*/,true/*X4*/,-1/*I*/);
+
+
+
+
+	while(1)
+	{
+		int32_t current=EncoderX.getPosition();
+		Serial.println(current);
+		delay(1000);
+	}
+
+	return;
+
+
 	if(proto.receiveCommand())
 	{
 		bool end = false;

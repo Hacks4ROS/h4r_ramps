@@ -38,14 +38,13 @@ case NUM:\
 namespace ardu_encoder
 {
 
-class ArduEncoder;
+
+
 class ArduEncoder
 {
 	static int num;
 	static ArduEncoder *interrupt_array[5];
-	INTWRAPS(a);
-	INTWRAPS(b);
-	INTWRAPS(i);
+
 
 	int32_t reset_pos_;
 	int32_t position_;
@@ -69,25 +68,28 @@ class ArduEncoder
 
 	void tick(PinID_t channel)
 	{
+
+
 		bool current;
 		bool other;
 
 		uint8_t A=( (*ports[id_A].port) & ports[id_A].mask );
 		uint8_t B=( (*ports[id_B].port) & ports[id_B].mask );
 
+
 		switch(channel)
 		{
 		case id_A:
-			if(last_chan_state_[id_A]==A)
-				return;
+//			if(last_chan_state_[id_A]==A)
+//				return;
 
 			current=!A;
 			other=B;
 			last_chan_state_[id_A]=A;
 			break;
 		case id_B:
-			if(last_chan_state_[id_B]==B)
-				return;
+//			if(last_chan_state_[id_B]==B)
+//				return;
 
 			current=B;
 			other=A;
@@ -110,7 +112,7 @@ class ArduEncoder
 
 	pcPortMask_t ports[3];
 	uint8_t last_chan_state_[3];
-
+public:
 	void a()
 	{
 		tick(id_A);
@@ -123,12 +125,14 @@ class ArduEncoder
 
 	void i()
 	{
-
+		Serial.println("i");
 	}
 
+	INTWRAPS(a);
+	INTWRAPS(b);
+	INTWRAPS(i);
 
-public:
-	ArduEncoder(int32_t ticks_per_round, uint8_t pinA, uint8_t pinB, bool x4, uint8_t pinI=-1);
+	ArduEncoder(int32_t ticks_per_round, int8_t pinA, int8_t pinB, bool x4, int8_t pinI=-1);
 
 	virtual ~ArduEncoder();
 

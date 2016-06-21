@@ -12,17 +12,20 @@
 
 
 
+
 namespace ardu_encoder
 {
 
 
-ArduEncoder::ArduEncoder(int32_t ticks_per_round, uint8_t pinA, uint8_t pinB, bool x4, uint8_t pinI)
+int ArduEncoder::num=0;
+ArduEncoder* ArduEncoder::interrupt_array[]={0,0,0,0,0};
+
+ArduEncoder::ArduEncoder(int32_t ticks_per_round, int8_t pinA, int8_t pinB, bool x4, int8_t pinI)
 :position_(0)
 ,ticks_per_round_(ticks_per_round)
 ,mode_x4_(x4)
 ,error_(false)
 {
-
 	interrupt_array[num]=this;
 
 	void (*a_fct_ptr)()=0;
@@ -79,23 +82,36 @@ ArduEncoder::ArduEncoder(int32_t ticks_per_round, uint8_t pinA, uint8_t pinB, bo
 			break;
 		}
 
+
+		Serial.print("Encoder Init Pin: ");
+		Serial.println(pin);
+
+		Serial.print("Interrupt: ");
+		Serial.println(interrupt);
+
+
+
 		ports[i].mask=digitalPinToBitMask(pin);
-		ports[i].port=(volatile uint8_t*)digitalPinToPort(pin);
+		ports[i].port=(volatile uint8_t*) portInputRegister(digitalPinToPort(pin));
 
 		last_chan_state_[i]=(*ports[i].port)&ports[i].mask;
 
+		pinMode(pin,INPUT_PULLUP);
+
+
 		if(interrupt!=NOT_AN_INTERRUPT)
 		{
-			PCattachInterrupt(pin,i_fct,CHANGE);
+			Serial.println("Attach!");
+				attachInterrupt(digitalPinToInterrupt(pin),i_fct,CHANGE);
 		}
 		else
 		{
-			attachInterrupt(pin,i_fct,CHANGE);
+		   PCattachInterrupt(pin,i_fct,CHANGE);
 		}
 
 	}
 	//Increase class number
-		num++;
+	num++;
 }
 
 ArduEncoder::~ArduEncoder()
