@@ -1,25 +1,47 @@
-rampsX:
+#Position
+rampsP_X:
   type: position_controllers/JointPositionController
   joint: joint_x
   
-rampsY:
+rampsP_Y:
   type: position_controllers/JointPositionController
   joint: joint_y
   
-rampsZ:
+rampsP_Z:
   type: position_controllers/JointPositionController
   joint: joint_z
 
-rampsE0:
+rampsP_E0:
   type: position_controllers/JointPositionController
   joint: joint_e0
 
-rampsE1:
+rampsP_E1:
   type: position_controllers/JointPositionController
   joint: joint_e1
 
+#Velocity
+rampsV_X:
+  type: velocity_controllers/JointVelocityController
+  joint: joint_x
+  
+rampsV_Y:
+  type: velocity_controllers/JointVelocityController
+  joint: joint_y
+  
+rampsV_Z:
+  type: velocity_controllers/JointVelocityController
+  joint: joint_z
 
-JointJointState:
+rampsV_E0:
+  type: velocity_controllers/JointVelocityController
+  joint: joint_e0
+
+rampsV_E1:
+  type: velocity_controllers/JointVelocityController
+  joint: joint_e1
+
+
+rampsJointState:
   type: joint_state_controller/JointStateController
   publish_rate: 10
   
