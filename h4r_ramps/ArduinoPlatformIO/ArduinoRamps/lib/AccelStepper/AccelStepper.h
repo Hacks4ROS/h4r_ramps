@@ -495,7 +495,7 @@ protected:
     /// Symbolic names for the direction the motor is turning
     typedef enum
     {
-	DIRECTION_CCW = 0,  ///< Clockwise
+    	DIRECTION_CCW = 0,  ///< Clockwise
         DIRECTION_CW  = 1   ///< Counter-Clockwise
     } Direction;
 
