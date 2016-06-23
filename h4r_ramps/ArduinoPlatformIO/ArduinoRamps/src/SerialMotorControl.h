@@ -87,6 +87,8 @@ public:
 		CMD_RESP_POS='P',
 		CMD_REQ_POS='p',
 
+		CMD_SET_OUTPUTS='E',
+
 		CMD_SET_GOAL='G',
 	}command_t;
 
