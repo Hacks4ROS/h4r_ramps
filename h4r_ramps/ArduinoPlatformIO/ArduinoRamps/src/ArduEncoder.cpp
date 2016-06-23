@@ -83,13 +83,6 @@ ArduEncoder::ArduEncoder(int32_t ticks_per_round, int8_t pinA, int8_t pinB, bool
 		}
 
 
-		Serial.print("Encoder Init Pin: ");
-		Serial.println(pin);
-
-		Serial.print("Interrupt: ");
-		Serial.println(interrupt);
-
-
 
 		ports[i].mask=digitalPinToBitMask(pin);
 		ports[i].port=(volatile uint8_t*) portInputRegister(digitalPinToPort(pin));
@@ -101,11 +94,11 @@ ArduEncoder::ArduEncoder(int32_t ticks_per_round, int8_t pinA, int8_t pinB, bool
 
 		if(interrupt!=NOT_AN_INTERRUPT)
 		{
-			Serial.println("Attach!");
 				attachInterrupt(digitalPinToInterrupt(pin),i_fct,CHANGE);
 		}
 		else
 		{
+		   //Serial.println("Attach PC!");
 		   PCattachInterrupt(pin,i_fct,CHANGE);
 		}
 
