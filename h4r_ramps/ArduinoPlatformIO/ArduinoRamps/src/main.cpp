@@ -10,18 +10,14 @@
 
 #include "ArduEncoder.h"
 
-
-
-
-
 bool pos_nVel=true;
+bool led=0;
 
 AccelStepper stepperX(AccelStepper::DRIVER,X_STEP_PIN,X_DIR_PIN);
 AccelStepper stepperY(AccelStepper::DRIVER,Y_STEP_PIN,Y_DIR_PIN);
 AccelStepper stepperZ(AccelStepper::DRIVER,Z_STEP_PIN,Z_DIR_PIN);
-AccelStepper stepperE0(AccelStepper::DRIVER,Y_STEP_PIN,Y_DIR_PIN);
-AccelStepper stepperE1(AccelStepper::DRIVER,Z_STEP_PIN,Z_DIR_PIN);
-
+AccelStepper stepperE0(AccelStepper::DRIVER,E0_STEP_PIN,E0_DIR_PIN);
+AccelStepper stepperE1(AccelStepper::DRIVER,E1_STEP_PIN,E1_DIR_PIN);
 
 MultiStepper multistepper;
 
@@ -29,7 +25,7 @@ using namespace serial_motor_control;
 SerialMotorControlArduino<5> proto(Serial);
 
 
-void stepper()
+void step()
 {
 	if(pos_nVel)
 	{
@@ -44,76 +40,61 @@ void stepper()
 }
 
 
-
-int blub=0;
-void testa()
-{
-	blub++;
-}
-
 void setup()
 {
-
-
 	Serial.begin(9600);
 
+	stepperX.setAcceleration(10000);
+	stepperY.setAcceleration(10000);
+	stepperZ.setAcceleration(10000);
+	stepperE0.setAcceleration(10000);
+	stepperE1.setAcceleration(10000);
 
-//	pinMode(X_ENABLE_PIN,OUTPUT);
-//	pinMode(Y_ENABLE_PIN,OUTPUT);
-//	pinMode(Z_ENABLE_PIN,OUTPUT);
-//	pinMode(E_ENABLE_PIN,OUTPUT);
-//
-//	digitalWrite(X_ENABLE_PIN,LOW);
-//	digitalWrite(Y_ENABLE_PIN,LOW);
-//	digitalWrite(Z_ENABLE_PIN,LOW);
-//	digitalWrite(E_ENABLE_PIN,HIGH);
-//
-//	stepperX.setAcceleration(100);
-//	stepperY.setAcceleration(100);
-//	stepperZ.setAcceleration(100);
-//	stepperE0.setAcceleration(100);
-//	stepperE1.setAcceleration(100);
-//
-//	stepperX.setMaxSpeed(1000);
-//	stepperY.setMaxSpeed(1000);
-//	stepperZ.setMaxSpeed(1000);
-//	stepperE0.setMaxSpeed(1000);
-//	stepperE1.setMaxSpeed(1000);
-//
-//	multistepper.addStepper(stepperX);
-//	multistepper.addStepper(stepperY);
-//	multistepper.addStepper(stepperZ);
-//	multistepper.addStepper(stepperE0);
-//	multistepper.addStepper(stepperE1);
-//
-//    Timer1.initialize(100);
-//    Timer1.attachInterrupt(stepper);
-//
+	stepperX.setEnablePin(X_ENABLE_PIN);
+	stepperY.setEnablePin(Y_ENABLE_PIN);
+	stepperZ.setEnablePin(Z_ENABLE_PIN);
+	stepperE0.setEnablePin(E0_ENABLE_PIN);
+	stepperE1.setEnablePin(E1_ENABLE_PIN);
 
 
-//    pinMode(1,INPUT);
-//    attachInterrupt(digitalPinToInterrupt(21),testa,CHANGE);
+	stepperX.setPinsInverted(false,false,true);
+	stepperY.setPinsInverted(false,false,true);
+	stepperZ.setPinsInverted(false,false,true);
+	stepperE0.setPinsInverted(false,false,true);
+	stepperE1.setPinsInverted(false,false,true);
+
+	stepperX.setMaxSpeed(10000);
+	stepperY.setMaxSpeed(10000);
+	stepperZ.setMaxSpeed(10000);
+	stepperE0.setMaxSpeed(10000);
+	stepperE1.setMaxSpeed(10000);
+
+	multistepper.addStepper(stepperX);
+	multistepper.addStepper(stepperY);
+	multistepper.addStepper(stepperZ);
+	multistepper.addStepper(stepperE0);
+	multistepper.addStepper(stepperE1);
+
+
+
+	Timer1.initialize(100);
+    Timer1.attachInterrupt(step);
+
+    pinMode(LED_BUILTIN,OUTPUT);
+
+//	ardu_encoder::ArduEncoder EncoderX(512,20 /*A*/,21 /*B*/,false/*X4*/,-1/*I*/);
 }
 
 void loop()
 {
-	ardu_encoder::ArduEncoder EncoderX(512,20 /*A*/,21 /*B*/,true/*X4*/,-1/*I*/);
 
-
-
-
-	while(1)
-	{
-		int32_t current=EncoderX.getPosition();
-		Serial.println(current);
-		delay(1000);
-	}
-
-	return;
 
 
 	if(proto.receiveCommand())
 	{
+
+		led=!led;
+		digitalWrite(LED_BUILTIN,led);
 		bool end = false;
 		for(int i=0; i<5 && !end;i++)
 		{
@@ -144,6 +125,7 @@ void loop()
 
 				case SerialMotorControl<5>::CMD_SET_VELOCITY:
 						stepper->setSpeed(proto.getReceivedData()->data[i]);
+						stepper->enableOutputs();
 						pos_nVel=false;
 					break;
 
@@ -153,6 +135,18 @@ void loop()
 						if(i==2)
 							proto.sendOutput();
 					break;
+
+				case SerialMotorControl<5>::CMD_SET_OUTPUTS:
+					if(proto.getReceivedData()->data[i])
+					{
+						stepper->enableOutputs();
+					}
+					else
+					{
+						stepper->disableOutputs();
+					}
+					break;
+
 				default:
 					break;
 				}
