@@ -30,9 +30,13 @@
 #define Z_ENCDR_A_Q        39
 #define Z_ENCDR_B_Q        41
 
-#define E_STEP_PIN         26
-#define E_DIR_PIN          28
-#define E_ENABLE_PIN       24
+#define E0_STEP_PIN         26
+#define E0_DIR_PIN          28
+#define E0_ENABLE_PIN       24
+
+#define E1_STEP_PIN         36
+#define E1_DIR_PIN          34
+#define E1_ENABLE_PIN       30
 
 #define SDPOWER            -1
 #define SDSS               53
